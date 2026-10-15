@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#edf6ff">
+<title>Tarry | Home Dashboard</title>
+<style>
+:root {
+  --navy:#092d68;
+  --blue:#147be8;
+  --muted:#55769d;
+  --glass:rgba(255,255,255,.76);
+  --border:rgba(255,255,255,.96);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--navy);
+  background:
+    radial-gradient(ellipse at 8% 8%,#fff 0,transparent 36%),
+    radial-gradient(ellipse at 90% 35%,#b8dcff 0,transparent 38%),
+    linear-gradient(145deg,#edf7ff,#dceeff,#f8fbff);
+  min-height:100vh;
+}
+button { font:inherit; cursor:pointer; color:inherit; }
+button:focus-visible { outline:3px solid #1685ff; outline-offset:3px; }
+.app { max-width:1100px; margin:auto; padding:18px 20px 110px; }
+.topbar { display:flex; align-items:center; gap:13px; margin-bottom:22px; }
+.glass-btn {
+  width:47px; height:47px; flex-shrink:0; border-radius:16px;
+  border:1px solid var(--border); background:#ffffff99;
+  display:grid; place-items:center; color:var(--navy);
+  box-shadow:0 5px 16px #1a4d8012;
+}
+.glass-btn svg { width:23px; height:23px; }
+.brand { display:flex; align-items:center; gap:9px; flex:1; min-width:0; }
+.logo { width:43px; height:51px; flex-shrink:0; }
+.brand-name { font-size:30px; font-weight:800; letter-spacing:-1px; }
+.tagline { color:#337ec2; font-size:12px; margin-top:3px; }
+.actions { display:flex; gap:7px; }
+.hero {
+  min-height:205px; border:1px solid white; border-radius:25px;
+  padding:29px; position:relative; overflow:hidden;
+  background:
+    linear-gradient(90deg,#f5fbfff2 0%,#eff8ffbf 53%,#e3f3ff20 100%),
+    linear-gradient(160deg,#c9e7ff,#eaf7ff 43%,#87b9e6 75%,#d9efff);
+  box-shadow:0 12px 30px #3c78a515,inset 0 1px 2px white;
+}
+.hero:before {
+  content:""; position:absolute; right:-3%; bottom:-30px; width:75%; height:135px;
+  background:linear-gradient(145deg,#d8efff,#8dc6ef 55%,#3e7db7);
+  clip-path:polygon(0 75%,17% 29%,30% 58%,48% 4%,64% 56%,79% 18%,100% 65%,100% 100%,0 100%);
+}
+.hero:after {
+  content:""; position:absolute; right:7%; bottom:0; width:39%; height:105px;
+  background:linear-gradient(145deg,#4a94ce,#174a82);
+  clip-path:polygon(0 100%,35% 23%,52% 63%,73% 0,100% 100%);
+  opacity:.75;
+}
+.hero-copy { position:relative; z-index:2; max-width:68%; }
+.eyebrow { font-size:11px; letter-spacing:1.8px; text-transform:uppercase; font-weight:700; color:#267bc3; }
+.hero h1 { font-size:clamp(31px,5vw,46px); letter-spacing:-1.2px; margin:12px 0 8px; }
+.hero p { font-size:16px; line-height:1.5; color:#356da7; margin:0; }
+.cross { position:absolute; z-index:2; right:17%; top:19px; height:105px; width:43px; }
+.cross:before,.cross:after { content:""; position:absolute; background:#123e78; border-radius:3px; box-shadow:0 0 15px #fff8; }
+.cross:before { width:8px; height:92px; left:18px; }
+.cross:after { width:43px; height:8px; top:24px; }
+.section-title { display:flex; align-items:end; justify-content:space-between; gap:10px; margin:26px 2px 14px; }
+.section-title h2 { font-size:21px; margin:0; }
+.section-title p { color:var(--muted); font-size:13px; margin:5px 0 0; }
+.section-title small { color:#557ba4; font-size:11px; }
+.cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.card {
+  position:relative; text-align:left; min-width:0; padding:19px;
+  border:1px solid var(--border); border-radius:22px;
+  background:var(--glass); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 8px 23px #23588c10,inset 0 1px white;
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover { transform:translateY(-2px); box-shadow:0 12px 27px #23588c1b; }
+.card-head { display:flex; align-items:center; gap:12px; padding-right:15px; }
+.icon {
+  width:59px; height:59px; border-radius:19px; flex-shrink:0;
+  display:grid; place-items:center; color:white;
+  box-shadow:inset 0 1px 2px #ffffff66,0 5px 12px #164b7c17;
+}
+.icon svg { width:29px; height:29px; }
+.blue { background:linear-gradient(145deg,#42b8ff,#0861df); }
+.green { background:linear-gradient(145deg,#2cddbb,#078674); }
+.orange { background:linear-gradient(145deg,#ffcb65,#f17a17); }
+.purple { background:linear-gradient(145deg,#d477ff,#7925d7); }
+.teal { background:linear-gradient(145deg,#38d8e6,#087f9c); }
+.card h3 { font-size:19px; line-height:1.25; margin:0; letter-spacing:-.3px; }
+.card p { font-size:13px; line-height:1.55; color:#496f99; margin:14px 0; }
+.arrow { position:absolute; right:15px; top:16px; color:#147be8; font-size:25px; }
+.pill { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:999px; font-size:11px; font-weight:700; }
+.pill svg { width:15px; height:15px; }
+.pill-blue { background:#e0f1ff; color:#086bd2; }
+.pill-green { background:#dcfaf1; color:#078773; }
+.pill-orange { background:#fff0dc; color:#bf6507; }
+.pill-purple { background:#f1e4ff; color:#7628c9; }
+.pill-teal { background:#d9f8fc; color:#057c95; }
+.wide { grid-column:1/-1; display:flex; align-items:center; gap:16px; }
+.wide .icon { width:58px; height:58px; }
+.wide-content { flex:1; min-width:0; }
+.wide p { margin:8px 0 11px; }
+.focus {
+  display:flex; align-items:center; gap:14px; margin-top:16px; padding:18px;
+  border:1px solid white; border-radius:21px;
+  background:linear-gradient(100deg,#ffffffc9,#d8edffbd);
+  box-shadow:inset 0 1px white;
+}
+.focus-symbol { font-size:30px; color:#1685d8; }
+.focus h3 { margin:0 0 5px; font-size:15px; }
+.focus p { margin:0; font-size:12px; line-height:1.5; color:#52779d; }
+.bottom-nav {
+  position:fixed; z-index:10; bottom:9px; left:50%; transform:translateX(-50%);
+  width:min(720px,calc(100% - 20px)); display:grid; grid-template-columns:repeat(5,1fr);
+  padding:7px; border-radius:23px; border:1px solid white;
+  background:#ffffffc9; backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
+  box-shadow:0 8px 30px #1d548c24;
+}
+.nav-item {
+  min-height:59px; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:4px; border:0; border-radius:16px;
+  background:transparent; color:#49688e; font-size:11px;
+}
+.nav-item svg { width:22px; height:22px; }
+.nav-item.active { background:#e3f2ff; color:#0878ef; font-weight:700; }
+.overlay { display:none; position:fixed; inset:0; background:#092d6870; z-index:20; }
+.overlay.show { display:block; }
+.sidebar {
+  position:fixed; z-index:21; inset:0 auto 0 0; width:min(320px,86vw);
+  padding:23px 18px; background:#f8fcfff5; backdrop-filter:blur(25px);
+  box-shadow:10px 0 40px #052d601c; transform:translateX(-105%);
+  transition:transform .25s; display:flex; flex-direction:column;
+}
+.sidebar.show { transform:translateX(0); }
+.side-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:25px; }
+.side-brand { display:flex; align-items:center; gap:8px; font-size:24px; font-weight:800; }
+.side-brand .logo { width:39px; height:46px; }
+.close { border:0; border-radius:12px; width:38px; height:38px; background:#e4f1ff; font-size:23px; }
+.side-link { width:100%; display:flex; align-items:center; gap:13px; padding:14px 12px; border:0; border-radius:14px; background:transparent; text-align:left; font-size:14px; }
+.side-link:hover { background:#e5f2ff; }
+.side-link svg { width:22px; height:22px; color:#126bd0; }
+.side-foot { margin-top:auto; border-top:1px solid #d7e7f7; padding-top:17px; color:#55799d; font-size:12px; line-height:1.6; }
+.notice {
+  position:fixed; z-index:30; left:50%; bottom:94px; transform:translateX(-50%);
+  background:#0b3475; color:white; padding:12px 16px; border-radius:13px;
+  box-shadow:0 8px 25px #082b5a30; font-size:13px; display:none;
+  max-width:90vw; text-align:center;
+}
+.notice.show { display:block; }
+@media(min-width:800px) { .card p { font-size:14px; } }
+@media(max-width:560px) {
+  .app { padding:12px 12px 95px; }
+  .topbar { gap:7px; margin-bottom:15px; }
+  .glass-btn { width:38px; height:40px; border-radius:13px; }
+  .glass-btn svg { width:20px; height:20px; }
+  .brand { gap:5px; }
+  .logo { width:35px; height:43px; }
+  .brand-name { font-size:25px; }
+  .tagline { font-size:10px; }
+  .actions { gap:4px; }
+  .hero { min-height:175px; padding:20px 17px; border-radius:21px; }
+  .hero-copy { max-width:78%; }
+  .hero h1 { font-size:30px; }
+  .hero p { font-size:13px; }
+  .eyebrow { font-size:9px; letter-spacing:1px; }
+  .cross { right:8%; top:20px; transform:scale(.72); transform-origin:top right; }
+  .section-title { margin-top:22px; }
+  .section-title h2 { font-size:17px; }
+  .section-title p { font-size:11px; }
+  .section-title small { display:none; }
+  .cards { gap:9px; }
+  .card { padding:12px 11px; border-radius:18px; }
+  .card-head { display:block; padding-right:9px; }
+  .icon { width:48px; height:48px; border-radius:15px; margin-bottom:10px; }
+  .icon svg { width:25px; height:25px; }
+  .card h3 { font-size:15px; }
+  .card p { font-size:11px; line-height:1.5; margin:9px 0 11px; }
+  .arrow { right:10px; top:10px; font-size:21px; }
+  .pill { font-size:9px; padding:7px 8px; gap:4px; }
+  .pill svg { width:13px; height:13px; }
+  .wide { display:flex; gap:11px; align-items:flex-start; padding:13px; }
+  .wide .icon { width:47px; height:47px; margin:0; }
+  .wide h3 { font-size:16px; }
+  .wide p { margin:6px 0 9px; }
+  .focus { padding:13px; gap:10px; margin-top:12px; }
+  .focus-symbol { font-size:25px; }
+  .focus h3 { font-size:13px; }
+  .focus p { font-size:11px; }
+  .bottom-nav { width:calc(100% - 12px); bottom:6px; padding:5px; border-radius:19px; }
+  .nav-item { min-height:55px; font-size:10px; gap:3px; }
+  .nav-item svg { width:20px; height:20px; }
+}
+</style>
+</head>
+<body>
+
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <symbol id="book" viewBox="0 0 24 24"><path d="M3 5.5A3.5 3.5 0 0 1 6.5 2H11v18H6.5A3.5 3.5 0 0 0 3 21zM21 5.5A3.5 3.5 0 0 0 17.5 2H13v18h4.5a3.5 3.5 0 0 1 3.5 1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="prayer" viewBox="0 0 24 24"><path d="M12 3v5M9.5 5.5h5M8 10l-3 5 4 5 3-4 3 4 4-5-3-5M10 9l2 4 2-4M12 13v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="sermon" viewBox="0 0 24 24"><path d="M12 2v5M9.5 4.5h5M5 10h14l-2 10H7zM3 10h18M9 14v3M15 14v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="journal" viewBox="0 0 24 24"><path d="M13 4H5a2 2 0 0 0-2 2v14h13a2 2 0 0 0 2-2v-5M8 9h5M8 13h4M15 3l6 6-8 8-4 1 1-4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="target" viewBox="0 0 24 24"><circle cx="11" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="11" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 13 21 3M15 3h6v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21a8 8 0 0 1 16 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="19" cy="12" r="1.7" fill="currentColor"/></symbol>
+  <symbol id="history" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 1-8.5 6M3 4v5h5M12 7v5l4 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m19 13 2 1-2 4-2-1-2 1v2H9v-2l-2-1-2 1-2-4 2-1v-2L3 10l2-4 2 1 2-1V4h6v2l2 1 2-1 2 4-2 1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></symbol>
+  <symbol id="shield" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6zM8.5 12l2.3 2.3 4.8-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="chart" viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-9M15 6h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar" aria-label="Sidebar">
+  <div class="side-head">
+    <div class="side-brand">
+      <svg class="logo" viewBox="0 0 64 72" aria-hidden="true"><path d="M32 3v39M18 17h28" stroke="#0a397c" stroke-width="6" stroke-linecap="round"/><path d="M29 39C16 38 8 30 5 22c12 2 20 7 24 17M35 39c13-1 21-9 24-17-12 2-20 7-24 17M29 45C15 46 8 54 5 64c13-2 21-7 24-17M35 45c14 1 21 9 24 19-13-2-21-7-24-17" fill="#1587f4"/><path d="M32 42v25" stroke="#0a397c" stroke-width="4" stroke-linecap="round"/></svg>
+      <div>Tarry<div class="tagline">Grow Closer to God</div></div>
+    </div>
+    <button class="close" onclick="closeSidebar()" aria-label="Close sidebar">×</button>
+  </div>
+  <button class="side-link" onclick="showNotice('Bible Study Tools will be developed separately.')"><svg><use href="#book"/></svg>Bible Study Tools</button>
+  <button class="side-link" onclick="showNotice('Bible History AI will be developed separately.')"><svg><use href="#history"/></svg>Bible History AI</button>
+  <button class="side-link" onclick="showNotice('Settings will be developed separately.')"><svg><use href="#settings"/></svg>Settings</button>
+  <button class="side-link" onclick="showNotice('Privacy & Help will be developed separately.')"><svg><use href="#shield"/></svg>Privacy &amp; Help</button>
+  <div class="side-foot">DWELL · STUDY · GROW<br>A quiet place for your walk with God.</div>
+</aside>
+
+<main class="app">
+  <header class="topbar">
+    <button class="glass-btn" onclick="openSidebar()" aria-label="Open sidebar"><svg><use href="#menu"/></svg></button>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 72" aria-hidden="true"><path d="M32 3v39M18 17h28" stroke="#0a397c" stroke-width="6" stroke-linecap="round"/><path d="M29 39C16 38 8 30 5 22c12 2 20 7 24 17M35 39c13-1 21-9 24-17-12 2-20 7-24 17M29 45C15 46 8 54 5 64c13-2 21-7 24-17M35 45c14 1 21 9 24 19-13-2-21-7-24-17" fill="#1587f4"/><path d="M32 42v25" stroke="#0a397c" stroke-width="4" stroke-linecap="round"/></svg>
+      <div><div class="brand-name">Tarry</div><div class="tagline">DWELL · STUDY · GROW</div></div>
+    </div>
+    <div class="actions">
+      <button class="glass-btn" onclick="showNotice('Dashboard search is a visual placeholder for now.')" aria-label="Search"><svg><use href="#search"/></svg></button>
+      <button class="glass-btn" onclick="showNotice('Notifications will be added in a later task.')" aria-label="Notifications"><svg><use href="#bell"/></svg></button>
+      <button class="glass-btn" onclick="showNotice('Profile tools will be added in a later task.')" aria-label="Profile"><svg><use href="#user"/></svg></button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Your spiritual workspace</div>
+      <h1>Explore Tarry</h1>
+      <p>Discover tools to help you grow spiritually.</p>
+    </div>
+    <div class="cross" aria-hidden="true"></div>
+  </section>
+
+  <div class="section-title">
+    <div><h2>Grow at your own pace</h2><p>Everything for your walk with God.</p></div>
+    <small>YOUR JOURNEY</small>
+  </div>
+
+  <section class="cards" aria-label="Main features">
+    <button class="card" onclick="showNotice('Bible Study will be developed as its own feature.')">
+      <span class="arrow">›</span>
+      <div class="card-head"><div class="icon blue"><svg><use href="#book"/></svg></div><h3>Bible Study</h3></div>
+      <p>Read and explore Scripture. Reflect on verses and grow in God's Word.</p>
+      <span class="pill pill-blue">Read · Reflect · Grow</span>
+    </button>
+
+    <button class="card" onclick="showNotice('Prayer Journey will be developed as its own feature.')">
+      <span class="arrow">›</span>
+      <div class="card-head"><div class="icon green"><svg><use href="#prayer"/></svg></div><h3>Prayer Journey</h3></div>
+      <p>Organize prayer requests and build a consistent rhythm of prayer.</p>
+      <span class="pill pill-green">Stay consistent</span>
+    </button>
+
+    <button class="card" onclick="showNotice('Sermon Studio will have its own editor, outline, research, notes, and save tools.')">
+      <span class="arrow">›</span>
+      <div class="card-head"><div class="icon orange"><svg><use href="#sermon"/></svg></div><h3>Sermon Studio</h3></div>
+      <p>Prepare sermons, organize outlines, research Scripture, and save your work.</p>
+      <span class="pill pill-orange">Create · Edit · Save</span>
+    </button>
+
+    <button class="card" onclick="showNotice('Journal will have its own entries, categories, search, and editing tools.')">
+      <span class="arrow">›</span>
+      <div class="card-head"><div class="icon purple"><svg><use href="#journal"/></svg></div><h3>Journal</h3></div>
+      <p>Develop and keep your personal notes, prayers, reflections, and testimonies.</p>
+      <span class="pill pill-purple">Write · Reflect · Grow</span>
+    </button>
+
+    <button class="card wide" onclick="showNotice('Plans & Goals will be developed as its own feature.')">
+      <div class="icon teal"><svg><use href="#target"/></svg></div>
+      <div class="wide-content"><h3>Plans &amp; Goals</h3><p>Set spiritual goals, create plans, and track your progress.</p><span class="pill pill-teal"><svg><use href="#chart"/></svg>Plan · Track · Grow</span></div>
+      <span class="arrow">›</span>
+    </button>
+  </section>
+
+  <section class="focus">
+    <div class="focus-symbol">✧</div>
+    <div><h3>Stay Focused on What Matters</h3><p>Small steps and a heart for God can lead to lasting growth.</p></div>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Main navigation">
+  <button class="nav-item active" onclick="selectNav(this,'Home')"><svg><use href="#home"/></svg><span>Home</span></button>
+  <button class="nav-item" onclick="selectNav(this,'Bible')"><svg><use href="#book"/></svg><span>Bible</span></button>
+  <button class="nav-item" onclick="selectNav(this,'Sermons')"><svg><use href="#sermon"/></svg><span>Sermons</span></button>
+  <button class="nav-item" onclick="selectNav(this,'Journal')"><svg><use href="#journal"/></svg><span>Journal</span></button>
+  <button class="nav-item" onclick="selectNav(this,'More')"><svg><use href="#more"/></svg><span>More</span></button>
+</nav>
+<div class="notice" id="notice" role="status" aria-live="polite"></div>
+
+<script>
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('overlay');
+const notice=document.getElementById('notice');
+let noticeTimer;
+function openSidebar(){sidebar.classList.add('show');overlay.classList.add('show');}
+function closeSidebar(){sidebar.classList.remove('show');overlay.classList.remove('show');}
+function showNotice(message){
+  notice.textContent=message;
+  notice.classList.add('show');
+  clearTimeout(noticeTimer);
+  noticeTimer=setTimeout(()=>notice.classList.remove('show'),3000);
+}
+function selectNav(button,name){
+  document.querySelectorAll('.nav-item').forEach(item=>item.classList.remove('active'));
+  button.classList.add('active');
+  if(name!=='Home') showNotice(name+' will get its own task before we connect it.');
+}
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeSidebar();});
+</script>
+</body>
+</html>
