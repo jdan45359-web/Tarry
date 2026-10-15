@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071D49">
+  <meta name="description" content="Tarry — Dwell, Study, Grow. Your personal Christian workspace.">
+  <title>Tarry | Dwell · Study · Grow</title>
+
+  <style>
+    :root {
+      --navy: #071D49;
+      --blue: #123B73;
+      --pale: #EAF1FB;
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background: var(--navy);
+    }
+
+    .welcome {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 54px 25px 24px;
+      overflow: hidden;
+      isolation: isolate;
+      text-align: center;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(234, 241, 251, 0.12) 0%,
+          rgba(7, 29, 73, 0.12) 36%,
+          rgba(7, 29, 73, 0.82) 70%,
+          #071D49 100%
+        ),
+        url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=85")
+        center / cover no-repeat;
+    }
+
+    .brand {
+      position: relative;
+      z-index: 1;
+      color: var(--navy);
+    }
+
+    .logo {
+      width: 92px;
+      height: 77px;
+      margin: 0 auto 8px;
+    }
+
+    .brand-name {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 12vw, 54px);
+      font-weight: 400;
+      letter-spacing: 7px;
+      line-height: 1.15;
+    }
+
+    .tagline {
+      margin: 12px 0 0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      white-space: nowrap;
+    }
+
+    .message {
+      position: relative;
+      z-index: 1;
+      max-width: 360px;
+      margin: auto 0 30px;
+      padding-top: 45px;
+      font-size: 17px;
+      line-height: 1.65;
+      text-shadow: 0 1px 8px rgba(7, 29, 73, 0.45);
+    }
+
+    .actions {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 54px;
+      width: 100%;
+      padding: 14px 20px;
+      border: 1px solid transparent;
+      border-radius: 30px;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .button-primary {
+      color: var(--white);
+      background: var(--navy);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .button-secondary {
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.88);
+      border-color: var(--navy);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid #93C5FD;
+      outline-offset: 4px;
+    }
+
+    .arrow {
+      margin-left: 9px;
+      font-size: 19px;
+    }
+
+    .footer {
+      position: relative;
+      z-index: 1;
+      margin: 24px 0 0;
+      font-size: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    @media (min-width: 600px) {
+      .welcome {
+        justify-content: flex-start;
+        padding-top: 70px;
+      }
+
+      .message {
+        margin-top: auto;
+        margin-bottom: 36px;
+        font-size: 19px;
+      }
+
+      .actions {
+        gap: 14px;
+      }
+    }
+
+    @media (max-height: 650px) {
+      .welcome {
+        padding-top: 28px;
+      }
+
+      .logo {
+        width: 68px;
+        height: 58px;
+      }
+
+      .brand-name {
+        font-size: 38px;
+      }
+
+      .message {
+        margin-top: 35px;
+        margin-bottom: 20px;
+        padding-top: 0;
+      }
+
+      .button {
+        min-height: 48px;
+      }
+
+      .footer {
+        margin-top: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="welcome">
+    <header class="brand" aria-label="Tarry">
+      <svg class="logo" viewBox="0 0 100 85"
+           xmlns="http://www.w3.org/2000/svg"
+           role="img" aria-label="Cross above an open Bible">
+        <g fill="none" stroke="#071D49"
+           stroke-width="5" stroke-linecap="round">
+          <path d="M50 4 V40"/>
+          <path d="M36 17 H64"/>
+        </g>
+        <path d="M8 46 Q28 33 47 49 V67 Q27 52 8 61 Z"
+              fill="#071D49"/>
+        <path d="M92 46 Q72 33 53 49 V67 Q73 52 92 61 Z"
+              fill="#071D49"/>
+        <path d="M50 49 V76"
+              fill="none" stroke="#071D49" stroke-width="3"/>
+        <path d="M8 70 Q29 62 47 77 Q29 69 8 78 Z"
+              fill="#071D49"/>
+        <path d="M92 70 Q71 62 53 77 Q71 69 92 78 Z"
+              fill="#071D49"/>
+      </svg>
+
+      <h1 class="brand-name">TARRY</h1>
+      <p class="tagline">DWELL · STUDY · GROW</p>
+    </header>
+
+    <p class="message">
+      A personal Christian workspace for deeper study,
+      consistent prayer, faithful ministry and lasting growth.
+    </p>
+
+    <nav class="actions" aria-label="Account">
+      <a class="button button-primary" href="signup.html">
+        Create Account <span class="arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="button button-secondary" href="signin.html">
+        Sign In <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+
+    <p class="footer">Together in His presence.</p>
+  </main>
+</body>
+</html>
