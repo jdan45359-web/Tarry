@@ -1132,63 +1132,346 @@ b.classList.toggle('on');
 
 };
 
-$('#voiceBtn').onclick=()=>{
+const bibleBooks = [
+  "Genesis","Exodus","Leviticus","Numbers","Deuteronomy",
+  "Joshua","Judges","Ruth","1 Samuel","2 Samuel",
+  "1 Kings","2 Kings","1 Chronicles","2 Chronicles",
+  "Ezra","Nehemiah","Esther","Job","Psalms","Psalm",
+  "Proverbs","Ecclesiastes","Song of Solomon","Isaiah",
+  "Jeremiah","Lamentations","Ezekiel","Daniel","Hosea",
+  "Joel","Amos","Obadiah","Jonah","Micah","Nahum",
+  "Habakkuk","Zephaniah","Haggai","Zechariah","Malachi",
+  "Matthew","Mark","Luke","John","Acts","Romans",
+  "1 Corinthians","2 Corinthians","Galatians","Ephesians",
+  "Philippians","Colossians","1 Thessalonians",
+  "2 Thessalonians","1 Timothy","2 Timothy","Titus",
+  "Philemon","Hebrews","James","1 Peter","2 Peter",
+  "1 John","2 John","3 John","Jude","Revelation"
+];
 
-const SpeechRecognition=
-window.SpeechRecognition||
-window.webkitSpeechRecognition;
+let lastDetectedReference = '';
 
-if(!SpeechRecognition){
+function detectBibleReference(text){
 
-toast('Voice input is not supported on this browser.');
+  text = text
+    .replace(/[.,!?]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
 
-return;
+  const pattern =
+    /((?:1|2|3)?\s*[A-Za-z]+(?:\s+[A-Za-z]+)?)\s+(\d+)\s*(?:[:\s]\s*)(\d+(?:\s*-\s*\d+)?)/i;
+
+  let match = text.match(pattern);
+
+  if(!match){
+
+    const words = text
+      .toLowerCase()
+      .replace(/chapter/g,'')
+      .replace(/verse/g,'')
+      .replace(/verses/g,'')
+      .split(/\s+/);
+
+    const numberWords = {
+      one:1,two:2,three:3,four:4,five:5,
+      six:6,seven:7,eight:8,nine:9,ten:10,
+      eleven:11,twelve:12,thirteen:13,fourteen:14,
+      fifteen:15,sixteen:16,seventeen:17,eighteen:18,
+      nineteen:19,twenty:20,twentyone:21,
+      twentytwo:22,twentythree:23,twentyfour:24,
+      twentyfive:25,twentysix:26,twentyseven:27,
+      twentyeight:28,twentynine:29,thirty:30,
+      thirtyone:31,thirtytwo:32,thirtythree:33,
+      thirtyfour:34,thirtyfive:35,thirtysix:36,
+      thirtyseven:37,thirtyeight:38,thirtynine:39,
+      forty:40,fortyone:41,fortytwo:42,
+      fortythree:43,fortyfour:44,fortyfive:45,
+      fortysix:46,fortyseven:47,fortyeight:48,
+      fortynine:49,fifty:50
+    };
+
+    let foundBook = '';
+
+    for(let i=0;i<bibleBooks.length;i++){
+
+      let book=bibleBooks[i].toLowerCase();
+
+      if(text.toLowerCase().includes(book)){
+
+        foundBook=bibleBooks[i];
+
+        break;
+
+      }
+
+    }
+
+    if(foundBook){
+
+      let afterBook =
+        text.toLowerCase()
+        .split(foundBook.toLowerCase())[1] || '';
+
+      let nums =
+        afterBook.match(/\d+/g);
+
+      if(nums && nums.length>=2){
+
+        return {
+          book:foundBook,
+          chapter:nums[0],
+          verse:nums[1]
+        };
+
+      }
+
+      let wordNums =
+        afterBook
+        .toLowerCase()
+        .split(/\s+/)
+        .map(x=>numberWords[x])
+        .filter(Boolean);
+
+      if(wordNums.length>=2){
+
+        return {
+          book:foundBook,
+          chapter:wordNums[0],
+          verse:wordNums[1]
+        };
+
+      }
+
+    }
+
+    return null;
+
+  }
+
+  let book = match[1].trim();
+
+  let validBook =
+    bibleBooks.find(
+      b=>b.toLowerCase()===book.toLowerCase()
+    );
+
+  if(!validBook){
+
+    validBook =
+      bibleBooks.find(
+        b=>
+        b.toLowerCase().includes(
+          book.toLowerCase()
+        )
+      );
+
+  }
+
+  if(!validBook) return null;
+
+  return {
+    book:validBook,
+    chapter:match[2],
+    verse:match[3]
+  };
 
 }
 
-let recognition=new SpeechRecognition();
+async function loadBibleVerse(reference){
 
-recognition.lang='en-US';
+  const url =
+    'https://bible-api.com/' +
+    encodeURIComponent(reference) +
+    '?translation=kjv';
 
-recognition.interimResults=false;
+  try{
 
-recognition.onstart=()=>{
+    $('#scriptureText').textContent=
+      'Loading Scripture...';
 
-$('#voiceBtn').textContent=
-'Listening...';
+    const response =
+      await fetch(url);
+
+    if(!response.ok)
+      throw new Error('Bible API error');
+
+    const data =
+      await response.json();
+
+    if(!data.text){
+
+      $('#scriptureText').textContent=
+        'Scripture not found.';
+
+      return;
+
+    }
+
+    $('#scriptureRef').textContent=
+      data.reference || reference;
+
+    $('#versionLabel').textContent=
+      'KJV';
+
+    $('#scriptureText').textContent=
+      data.text.trim();
+
+    lastDetectedReference =
+      data.reference || reference;
+
+    $('#insertScripture').style.display=
+      'inline-flex';
+
+    toast(
+      'Scripture found: ' +
+      (data.reference || reference)
+    );
+
+  }catch(error){
+
+    $('#scriptureText').textContent=
+      'Unable to load the Scripture. Check your internet connection and try again.';
+
+    toast('Could not load Scripture.');
+
+  }
+
+}
+
+$('#voiceBtn').onclick=()=>{
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+
+    toast(
+      'Voice recognition is not supported by this browser.'
+    );
+
+    return;
+
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang='en-US';
+
+  recognition.continuous=false;
+
+  recognition.interimResults=false;
+
+  recognition.onstart=()=>{
+
+    $('#voiceBtn').textContent=
+      '🎙 Listening...';
+
+    toast(
+      'Say a Bible reference, for example John 3:16.'
+    );
+
+  };
+
+  recognition.onresult=async e=>{
+
+    const spokenText =
+      e.results[0][0].transcript;
+
+    $('#voiceBtn').textContent=
+      'Processing...';
+
+    const reference =
+      detectBibleReference(spokenText);
+
+    if(!reference){
+
+      $('#voiceBtn').textContent=
+        'Start voice input';
+
+      toast(
+        'I could not detect a Bible reference.'
+      );
+
+      return;
+
+    }
+
+    const ref =
+      reference.book +
+      ' ' +
+      reference.chapter +
+      ':' +
+      reference.verse;
+
+    $('#scriptureSearch').value=ref;
+
+    await loadBibleVerse(ref);
+
+    $('#voiceBtn').textContent=
+      'Start voice input';
+
+  };
+
+  recognition.onerror=event=>{
+
+    $('#voiceBtn').textContent=
+      'Start voice input';
+
+    toast(
+      'Voice error: '+
+      event.error
+    );
+
+  };
+
+  recognition.onend=()=>{
+
+    $('#voiceBtn').textContent=
+      'Start voice input';
+
+  };
+
+  recognition.start();
 
 };
 
-recognition.onresult=e=>{
+$('#insertScripture').onclick=()=>{
 
-let text=e.results[0][0].transcript;
+  const text =
+    $('#scriptureText').textContent.trim();
 
-editor.focus();
+  const reference =
+    $('#scriptureRef').textContent.trim();
 
-document.execCommand(
-'insertText',
-false,
-text+' '
-);
+  if(!text || !reference){
 
-words();
+    toast('No Scripture available.');
 
-};
+    return;
 
-recognition.onerror=()=>{
+  }
 
-toast('Voice input could not be started.');
+  editor.focus();
 
-};
+  document.execCommand(
+    'insertHTML',
+    false,
+    '<blockquote>'+
+    esc(text)+
+    '<cite>— '+esc(reference)+' KJV</cite>'+
+    '</blockquote><p></p>'
+  );
 
-recognition.onend=()=>{
+  words();
 
-$('#voiceBtn').textContent=
-'Start voice input';
+  toast(
+    reference+
+    ' inserted into your sermon.'
+  );
 
-};
 
-recognition.start();
 
 };
 
