@@ -1313,8 +1313,13 @@ async function loadBibleVerse(reference){
     $('#versionLabel').textContent=
       'KJV';
 
-    $('#scriptureText').textContent=
-      data.text.trim();
+    const verseText =
+  data.text ||
+  (data.verses && data.verses.map(v => v.text).join(' ')) ||
+  '';
+
+$('#scriptureText').textContent =
+  verseText.trim();
 
     lastDetectedReference =
       data.reference || reference;
