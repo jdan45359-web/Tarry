@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Tarry</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #0a204b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 25px;
+      background: white;
+      border-radius: 22px;
+      box-shadow: 0 10px 35px rgba(10, 32, 75, 0.08);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo svg {
+      width: 66px;
+      height: 76px;
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-size: 39px;
+      letter-spacing: 7px;
+      margin: 5px 0;
+    }
+
+    .tagline {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      margin-top: 9px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin: 26px 0 8px;
+    }
+
+    .intro {
+      text-align: center;
+      color: #69758c;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 18px 0 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #d8deea;
+      border-radius: 10px;
+      font-size: 16px;
+      outline-color: #0a204b;
+    }
+
+    .forgot {
+      text-align: right;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    a {
+      color: #0a204b;
+      font-weight: bold;
+    }
+
+    .submit {
+      width: 100%;
+      padding: 16px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 12px;
+      background: #0a204b;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .signup {
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-top: 24px;
+    }
+
+    .footer {
+      text-align: center;
+      color: #7c879b;
+      font-size: 12px;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="logo">
+      <svg viewBox="0 0 100 110" fill="#0a204b"
+           xmlns="http://www.w3.org/2000/svg"
+           aria-label="Bible and cross logo">
+        <path d="M50 4 Q55 4 55 10 V39 H81 Q87 39 87 44 Q87 49 81 49 H55 V76 H45 V49 H19 Q13 49 13 44 Q13 39 19 39 H45 V10 Q45 4 50 4Z"/>
+        <path d="M9 62 Q29 45 47 62 V96 Q28 79 9 91Z"/>
+        <path d="M53 62 Q72 45 91 62 V91 Q72 79 53 96Z"/>
+        <path d="M49 63 H51 V101 H49Z"/>
+      </svg>
+
+      <div class="brand">TARRY</div>
+      <div class="tagline">DWELL · STUDY · GROW</div>
+    </div>
+
+    <h1>Welcome Back</h1>
+    <p class="intro">
+      Continue your journey of faith,
+      study, prayer, and growth.
+    </p>
+
+    <form id="signinForm">
+      <label for="email">Email Address</label>
+      <input id="email" name="email"
+             type="email"
+             placeholder="you@example.com"
+             autocomplete="email" required>
+
+      <label for="password">Password</label>
+      <input id="password" name="password"
+             type="password"
+             placeholder="Enter your password"
+             autocomplete="current-password" required>
+
+      <div class="forgot">
+        <a href="forgot-password.html">Forgot Password?</a>
+      </div>
+
+      <button class="submit" type="submit">
+        Sign In →
+      </button>
+    </form>
+
+    <p class="signup">
+      New to Tarry?
+      <a href="signup.html">Create Account</a>
+    </p>
+
+    <div class="footer">Together in His presence.</div>
+  </main>
+
+  <script>
+    document.getElementById("signinForm").addEventListener(
+      "submit", function(event) {
+        event.preventDefault();
+
+        alert(
+          "Your form is filled in, but sign-in is not connected " +
+          "to a real account system yet."
+        );
+      }
+    );
+  </script>
+</body>
+</html>
