@@ -1521,6 +1521,80 @@ x.classList.toggle('hidden');
 
 };
 
+  
+const historyQuestion = $('#historyQuestion');
+const askHistory = $('#askHistory');
+const historyAnswer = $('#historyAnswer');
+
+async function askTarryHistory() {
+  const question = historyQuestion.value.trim();
+
+  if (!question) {
+    historyAnswer.textContent = 'Please enter a Bible history question.';
+    return;
+  }
+
+  askHistory.disabled = true;
+  askHistory.textContent = 'Researching...';
+  historyAnswer.textContent = 'Researching your question. Please wait...';
+
+  try {
+    const response = await fetch(
+      'https://tarry-bible-history-ai.danielkitibwa935.workers.dev',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ question })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'The research request failed.');
+    }
+
+    historyAnswer.replaceChildren();
+
+    const answerText = document.createElement('p');
+    answerText.textContent = data.answer || 'No answer was returned.';
+    historyAnswer.appendChild(answerText);
+
+    if (data.sources && data.sources.length) {
+      const heading = document.createElement('h4');
+      heading.textContent = 'Sources';
+      historyAnswer.appendChild(heading);
+
+      data.sources.forEach(source => {
+        const link = document.createElement('a');
+        link.href = source.url;
+        link.textContent = source.title || source.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        historyAnswer.appendChild(link);
+        historyAnswer.appendChild(document.createElement('br'));
+      });
+    }
+  } catch (error) {
+    historyAnswer.textContent =
+      'Unable to research this question: ' + error.message;
+  } finally {
+    askHistory.disabled = false;
+    askHistory.textContent = '➜ Ask';
+  }
+}
+
+askHistory.addEventListener('click', askTarryHistory);
+
+historyQuestion.addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    askTarryHistory();
+  }
+});
+
+
 $('#menuBtn').onclick=()=>{
 
 $('#sidebar').classList.toggle('open');
